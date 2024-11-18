@@ -1,6 +1,6 @@
 package activeRecord;
 
-import java.util.ArrayList;
+import java.sql.Connection;
 
 public class DBConnection {
 
@@ -14,8 +14,9 @@ public class DBConnection {
 
     static String dbName = "testpersonne";
 
-    public static void getConnection() {
+    public static Connection getConnection() {
         //TODO
+        return null;
     }
 
     /**
