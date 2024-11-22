@@ -10,13 +10,17 @@ public class Film {
     private int id_real;
 
 
-    public Film(String t, Personne r) {
+    public Film(String t, Personne r) throws RealisateurAbsentException {
+        if(id_real == -1) throw new RealisateurAbsentException();
+
         this.titre = t;
         this.id_real = r.getId();
         this.id = -1;
     }
 
-    private Film(String t, int id_real, int id) {
+    private Film(String t, int id_real, int id) throws RealisateurAbsentException {
+        if(id_real == -1) throw new RealisateurAbsentException();
+
         this.titre = t;
         this.id = id;
         this.id_real = id_real;
@@ -52,7 +56,7 @@ public class Film {
      * @return une liste de tous les films de la base de donnees ayant le réalisateur p
      * @throws SQLException
      */
-    public static ArrayList<Film> findByReal(Personne p) throws SQLException {
+    public static ArrayList<Film> findByReal(Personne p) throws SQLException, RealisateurAbsentException {
         String request = "SELECT * FROM Personne WHERE id = ?;";
 
         ArrayList<Film> res = new ArrayList<>();
