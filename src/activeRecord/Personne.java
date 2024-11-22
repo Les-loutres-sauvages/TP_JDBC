@@ -131,7 +131,11 @@ public class Personne {
             prep.setInt(1, this.id);
             prep.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getSQLState().equals("23000")) {
+                System.out.println("Impossible de supprimer cette personne : elle est référencée dans une autre table.");
+            } else {
+                System.out.println("Une erreur inattendue est survenue : " + e.getMessage());
+            }
         }
     }
 
@@ -147,7 +151,11 @@ public class Personne {
             PreparedStatement prep = co.prepareStatement(request);
             prep.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getSQLState().equals("23000")) {
+                System.out.println("Impossible de supprimer cette table : des personnes sont référencées dans une autre table.");
+            } else {
+                System.out.println("Une erreur inattendue est survenue : " + e.getMessage());
+            }
         }
     }
 
