@@ -60,7 +60,7 @@ public class Personne {
         return null;
     }
 
-    public void createTable() throws SQLException {
+    public static void createTable() throws SQLException {
         String createString = "CREATE TABLE Personne ( "
                 + "ID INTEGER  AUTO_INCREMENT, " + "NOM varchar(40) NOT NULL, "
                 + "PRENOM varchar(40) NOT NULL, " + "PRIMARY KEY (ID))";

@@ -32,6 +32,7 @@ public class PrincipaleJDBC {
             // ajout de personne avec requete preparee
             String SQLPrep = "INSERT INTO Personne (nom, prenom) VALUES (?,?);";
             PreparedStatement prep;
+            Connection connect = DBConnection.getConnection();
             //l'option RETURN_GENERATED_KEYS permet de recuperer l'id
             prep = connect.prepareStatement(SQLPrep,
                     Statement.RETURN_GENERATED_KEYS);
@@ -117,7 +118,7 @@ public class PrincipaleJDBC {
 
             // suppression de la table personne
             String drop = "DROP TABLE Personne";
-            stmt = connect.createStatement();
+            Statement stmt = connect.createStatement();
             stmt.executeUpdate(drop);
 
         } catch (SQLException e) {
