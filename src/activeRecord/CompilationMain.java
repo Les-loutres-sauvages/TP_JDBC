@@ -107,9 +107,9 @@ public class CompilationMain {
 
 
         //supprime table film
-        Film.deleteTable();
+        Film.dropTable();
         //suppression de la table personne
-        Personne.deleteTable();
+        Personne.dropTable();
 
 
     }
