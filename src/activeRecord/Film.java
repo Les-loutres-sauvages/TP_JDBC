@@ -1,6 +1,7 @@
 package activeRecord;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Film {
 
@@ -27,7 +28,7 @@ public class Film {
      * @return le film de la base de donnees ayant l'id donné
      * @throws SQLException
      */
-    public static Film findById(int id) throws SQLException {
+    public static Film findById(int id) throws SQLException, RealisateurAbsentException {
         String request = "SELECT * FROM Film WHERE id = ?;";
 
         Connection co = DBConnection.getConnection();
@@ -45,7 +46,37 @@ public class Film {
         return null;
     }
 
-    public Personne getRealisateur() throws SQLException {
+
+    /**
+     * @param p Le réalisateur du film
+     * @return une liste de tous les films de la base de donnees ayant le réalisateur p
+     * @throws SQLException
+     */
+    public static ArrayList<Film> findByReal(Personne p) throws SQLException {
+        String request = "SELECT * FROM Personne WHERE id = ?;";
+
+        ArrayList<Film> res = new ArrayList<>();
+
+        Connection co = DBConnection.getConnection();
+        PreparedStatement prep = co.prepareStatement(request);
+        prep.setInt(1, p.getId());
+        prep.execute();
+
+        ResultSet rs = prep.getResultSet();
+        while (rs.next()) {
+            String titre = rs.getString("titre");
+            int id = rs.getInt("id");
+
+            Film f = new Film(titre, p.getId(), id);
+            res.add(f);
+        }
+
+        return res;
+    }
+
+
+    public Personne getRealisateur() throws SQLException, RealisateurAbsentException {
+        if(id_real == -1) throw new RealisateurAbsentException();
         return Personne.findById(this.id_real);
     }
 
