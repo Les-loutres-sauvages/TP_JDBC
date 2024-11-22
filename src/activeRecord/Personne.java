@@ -129,7 +129,7 @@ public class Personne {
      * /!\ DANGER ZONE /!\
      * Drop the table Personne
      */
-    public void dropTable() {
+    public static void dropTable() {
         try {
             String request = "DROP TABLE Personne;";
 
