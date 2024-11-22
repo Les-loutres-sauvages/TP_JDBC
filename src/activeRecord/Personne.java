@@ -20,7 +20,7 @@ public class Personne {
         this.id = id;
     }
 
-    public static ArrayList<Personne> FindAll() throws SQLException {
+    public static ArrayList<Personne> findAll() throws SQLException {
         String request = "SELECT * FROM Personne;";
 
         ArrayList<Personne> res = new ArrayList<>();
@@ -42,7 +42,7 @@ public class Personne {
         return res;
     }
 
-    public static Personne FindById(int id) throws SQLException {
+    public static Personne findById(int id) throws SQLException {
         String request = "SELECT * FROM Personne WHERE id = ?;";
 
         Connection co = DBConnection.getConnection();
@@ -76,7 +76,7 @@ public class Personne {
         stat.close();
     }
 
-    public static Personne FindByNom(String nom) throws SQLException {
+    public static Personne findByNom(String nom) throws SQLException {
         String request = "SELECT * FROM Personne WHERE nom = ?;";
 
         Connection co = DBConnection.getConnection();
