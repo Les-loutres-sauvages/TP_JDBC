@@ -75,7 +75,7 @@ public class CompilationMain {
 
 
         ///////////////// test film
-
+/*
         //create table
         Film.createTable();
 
@@ -109,7 +109,7 @@ public class CompilationMain {
         //supprime table film
         Film.deleteTable();
         //suppression de la table personne
-        Personne.deleteTable();
+        Personne.deleteTable();*/
 
 
     }

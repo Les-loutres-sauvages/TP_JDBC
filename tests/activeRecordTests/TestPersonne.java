@@ -2,7 +2,6 @@ package activeRecordTests;
 
 import activeRecord.DBConnection;
 import activeRecord.Personne;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +16,13 @@ public class TestPersonne {
 
     @BeforeEach
     public void setUp() throws SQLException {
-        Personne.createTable();
-        DBConnection.setNomDB("testpersonne");
+        try {
+            Personne.dropTable();
+            Personne.createTable();
+        } catch (Exception e) {
+            System.out.println(".");
+        }
+
     }
 
     @Test
@@ -39,7 +43,7 @@ public class TestPersonne {
     }
 
     @Test
-    public void testNewPersonne_Personne_value) throws Exception {
+    public void testNewPersonne_Personne_value() throws Exception {
         Personne p = new Personne("Michel", "Dupont");
         p.save();
 
@@ -48,7 +52,7 @@ public class TestPersonne {
     }
 
     @Test
-    public void testDeletePersonne) throws Exception {
+    public void testDeletePersonne() throws Exception {
         Personne p1 = new Personne("Michel", "Dupont");
         Personne p2 = new Personne("Michel2", "Dupont2");
         p1.save();
@@ -59,11 +63,98 @@ public class TestPersonne {
         assertEquals(1, liste.size());
     }
 
-    @AfterEach
-    public void tearDown() throws SQLException {
-        Personne.deleteTable();
-        DBConnection.getConnection().close();
+    @Test
+    public void testGetPrenom() throws Exception {
+        Personne p1 = new Personne("Michel", "Dupont");
+        p1.save();
+
+        assertEquals("Dupont", p1.getPrenom());
     }
+
+    @Test
+    public void testGetNom() throws Exception {
+        Personne p1 = new Personne("Michel", "Dupont");
+        p1.save();
+
+        assertEquals("Michel", p1.getNom());
+    }
+
+    @Test
+    public void testGetId() throws Exception {
+        Personne p1 = new Personne("Michel", "Dupont");
+        p1.save();
+
+        assertEquals(1, p1.getId());
+    }
+
+    @Test
+    public void testSetNom() throws Exception {
+        Personne p1 = new Personne("Michel", "Dupont");
+        p1.save();
+        p1.setNom("Michel2");
+
+        assertEquals("Michel2", p1.getNom());
+    }
+
+    @Test
+    public void testSetPrenom() throws Exception {
+        Personne p1 = new Personne("Michel", "Dupont");
+        p1.save();
+        p1.setPrenom("Dupont2");
+
+        assertEquals("Dupont2", p1.getPrenom());
+    }
+
+    @Test
+    public void testFindById() throws Exception {
+        Personne p1 = new Personne("Michel", "Dupont");
+        p1.save();
+        Personne p2 = new Personne("Michel2", "Dupont2");
+        p2.save();
+
+        Personne p3 = Personne.findById(2);
+        assertEquals("Michel2", p3.getNom());
+    }
+
+    @Test
+    public void testFindByName() throws Exception {
+        Personne p1 = new Personne("Michel", "Dupont");
+        p1.save();
+        Personne p2 = new Personne("Michel2", "Dupont2");
+        p2.save();
+
+        ArrayList<Personne> liste = Personne.findByName("Michel");
+        assertEquals(1, liste.size());
+    }
+
+    @Test
+    public void testSave() throws Exception {
+        Personne p1 = new Personne("Michel", "Dupont");
+        p1.setNom("Michel2");  // id = 1
+        p1.save(); // id = 1
+        p1.setNom("Michel");  // id = 2
+        p1.save();  // id = 2
+
+        ArrayList<Personne> liste = Personne.findAll();
+        assertEquals("Michel2", liste.get(0).getNom());
+    }
+
+    @Test
+    public void testSave2() throws Exception {
+        Personne p1 = new Personne("Michel", "Dupont");
+        p1.setNom("Michel2");  // id = 1
+        p1.save(); // id = 1
+        p1.setNom("Michel");  // id = 2
+        p1.save();  // id = 2
+
+        ArrayList<Personne> liste = Personne.findAll();
+        assertEquals("Michel2", liste.get(0).getNom());
+    }
+
+
+
+
+
 
 }
 

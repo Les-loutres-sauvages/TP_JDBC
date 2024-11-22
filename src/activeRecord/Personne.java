@@ -25,7 +25,7 @@ public class Personne {
      * @throws SQLException
      */
     public static ArrayList<Personne> findAll() throws SQLException {
-        String request = "SELECT * FROM Personne;";
+        String request = "SELECT * FROM Personne ORDER BY id ASC;";
 
         ArrayList<Personne> res = new ArrayList<>();
 
@@ -105,11 +105,21 @@ public class Personne {
     }
 
     public void save() throws SQLException {
-        Statement stat = DBConnection.getConnection().createStatement();
-        ResultSet res = stat.executeQuery("INSERT INTO personne('nom', 'prenom') VALUES (nom, prenom)");
+        Connection co = DBConnection.getConnection();
+        assert co != null;
 
-        res.close();
-        stat.close();
+        String query = "INSERT INTO personne (nom, prenom) VALUES (?, ?)";
+        PreparedStatement ps = co.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1, this.nom);
+        ps.setString(2, this.prenom);
+        if (ps.executeUpdate() == 1) {
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                this.id = rs.getInt(1);
+            }
+        } else {
+            throw new SQLException("Insertion failed");
+        }
     }
 
     public void delete() {
@@ -129,7 +139,7 @@ public class Personne {
      * /!\ DANGER ZONE /!\
      * Drop the table Personne
      */
-    public void dropTable() {
+    public static void dropTable() {
         try {
             String request = "DROP TABLE Personne;";
 
@@ -140,7 +150,6 @@ public class Personne {
             e.printStackTrace();
         }
     }
-
 
 
     public void setNom(String n) {

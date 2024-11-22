@@ -15,16 +15,30 @@ public class DBConnection {
     private static String portNumber = "3306";
 
     private static String dbName = "testpersonne";
-    private static DBConnection dbConnection;
+    private static DBConnection dbConnection = null;
     private Connection connect = null;
 
     private DBConnection() throws SQLException {
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", userName);
-        connectionProps.put("password", password);
-        System.out.println("jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName);
-        connect = DriverManager.getConnection("jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName, connectionProps);
-        System.out.println(connect.isValid(10));
+        try {
+            Properties connectionProps = new Properties();
+            connectionProps.put("user", userName);
+            connectionProps.put("password", password);
+            connect = DriverManager.getConnection("jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName, connectionProps);
+            /*System.out.println("Connexion réussie : " + connect.isValid(10));
+            System.out.println("Connexion réussie : " + connect.getCatalog());
+            System.out.println("Connexion réussie : " + connect.getSchema());
+            System.out.println("Connexion réussie : " + connect.getMetaData().getURL());
+            System.out.println("Connexion réussie : " + connect.getMetaData().getUserName());
+            System.out.println("Connexion réussie : " + connect);
+            System.out.println("Connexion réussie : " + connect.getMetaData().getDatabaseProductName());
+            System.out.println("Connexion réussie : " + connect.getMetaData().getDatabaseProductVersion());
+            System.out.println("Connexion réussie : " + connect.getMetaData().getDriverName());
+            System.out.println("Connexion réussie : " + connect.getMetaData().getDriverVersion());
+            System.out.println("Connexion réussie : " + connect.getMetaData().getDriverMajorVersion());
+            System.out.println("Connexion réussie : " + connect.getMetaData().getDriverMinorVersion());*/
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la connexion à la base de données : " + e.getMessage());
+        }
     }
 
     public synchronized static Connection getConnection()  {
@@ -39,7 +53,7 @@ public class DBConnection {
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
-
+        return null;
     }
 
     /**
@@ -48,8 +62,9 @@ public class DBConnection {
      */
     public static void setNomDB(String db_name) throws SQLException {
         dbConnection.connect.close();
-        dbConnection.connect = null;
         dbName = db_name;
+        dbConnection.connect = null;
+
     }
 
 }
