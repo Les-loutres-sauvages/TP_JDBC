@@ -14,7 +14,7 @@ public class Personne {
         this.id = -1;
     }
 
-    public Personne(String n, String p, int id) {
+    private Personne(String n, String p, int id) {
         this.nom = n;
         this.prenom = p;
         this.id = id;
