@@ -57,13 +57,16 @@ public class Film {
      * @throws SQLException
      */
     public static ArrayList<Film> findByReal(Personne p) throws SQLException, RealisateurAbsentException {
-        String request = "SELECT * FROM Personne WHERE id = ?;";
+        int p_id = p.getId();
+        if(p_id == -1) throw new RealisateurAbsentException();
+
+        String request = "SELECT * FROM Film WHERE id = ?;";
 
         ArrayList<Film> res = new ArrayList<>();
 
         Connection co = DBConnection.getConnection();
         PreparedStatement prep = co.prepareStatement(request);
-        prep.setInt(1, p.getId());
+        prep.setInt(1, p_id);
         prep.execute();
 
         ResultSet rs = prep.getResultSet();
@@ -112,21 +115,29 @@ public class Film {
 
 
     public static void createTable() throws SQLException {
-        String createString = "CREATE TABLE Film ( "
-                + "id INTEGER  AUTO_INCREMENT, "
-                + "titre varchar(40) NOT NULL, "
+        String createString = "CREATE TABLE film ( "
+                + "id INTEGER AUTO_INCREMENT, "
+                + "titre VARCHAR(40) NOT NULL, "
                 + "id_rea INTEGER DEFAULT NULL, "
                 + "PRIMARY KEY (id), "
-                + "KEY `id_rea` (`id_rea`),"
-                + "CONSTRAINT `film_ibfk_1` FOREIGN KEY (`id_rea`) REFERENCES `personne` (`id`)";
+                + "KEY `id_rea` (`id_rea`), "
+                + "CONSTRAINT `film_ibfk_1` FOREIGN KEY (`id_rea`) REFERENCES `personne` (`id`) "
+                + ");";
         Statement stmt = DBConnection.getConnection().createStatement();
         stmt.executeUpdate(createString);
     }
 
+
     public static void dropTable() throws SQLException {
-        String dropString = "DROP TABLE Film;";
-        Statement stmt = DBConnection.getConnection().createStatement();
-        stmt.executeUpdate(dropString);
+        try {
+            String request = "DROP TABLE film;";
+
+            Connection co = DBConnection.getConnection();
+            PreparedStatement prep = co.prepareStatement(request);
+            prep.execute();
+        } catch (SQLException e) {
+            System.out.println("Une erreur inattendue est survenue : " + e.getMessage());
+        }
     }
 
     public int getId() {
