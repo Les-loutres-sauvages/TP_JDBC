@@ -11,10 +11,10 @@ public class Film {
 
 
     public Film(String t, Personne r) throws RealisateurAbsentException {
-        if(id_real == -1) throw new RealisateurAbsentException();
-
         this.titre = t;
         this.id_real = r.getId();
+        if(id_real == -1) throw new RealisateurAbsentException();
+
         this.id = -1;
     }
 
