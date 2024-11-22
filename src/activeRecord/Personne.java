@@ -41,4 +41,49 @@ public class Personne {
 
         return res;
     }
+
+    public static Personne FindById(int id) throws SQLException {
+        String request = "SELECT * FROM Personne WHERE id = ?;";
+
+        Connection co = DBConnection.getConnection();
+        PreparedStatement prep = co.prepareStatement(request);
+        prep.setInt(1, id);
+        prep.execute();
+
+        ResultSet rs = prep.getResultSet();
+        if (rs.next()) {
+            String nom = rs.getString("nom");
+            String prenom = rs.getString("prenom");
+
+            return new Personne(nom, prenom, id);
+        }
+
+        return null;
+    }
+
+
+    public static Personne FindByNom(String nom) throws SQLException {
+        String request = "SELECT * FROM Personne WHERE nom = ?;";
+
+        Connection co = DBConnection.getConnection();
+        PreparedStatement prep = co.prepareStatement(request);
+        prep.setString(1, nom);
+        prep.execute();
+
+        ResultSet rs = prep.getResultSet();
+        if (rs.next()) {
+            String prenom = rs.getString("prenom");
+            int id = rs.getInt("id");
+
+            return new Personne(nom, prenom, id);
+        }
+
+        return null;
+    }
+
+
+
+
+
+
 }
