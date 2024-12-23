@@ -75,7 +75,7 @@ public class CompilationMain {
 
 
         ///////////////// test film
-/*
+
         //create table
         Film.createTable();
 

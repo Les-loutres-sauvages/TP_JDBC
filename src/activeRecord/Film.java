@@ -95,7 +95,7 @@ public class Film {
         PreparedStatement prep = co.prepareStatement(request, Statement.RETURN_GENERATED_KEYS);
         prep.setString(1, this.titre);
         prep.setInt(2, this.id_real);
-        prep.execute();
+        prep.executeUpdate();
 
         ResultSet rs = prep.getGeneratedKeys();
         if (rs.next()) {
